@@ -2,8 +2,8 @@ package web
 
 import (
 	"github.com/raymondgitonga/go-otel-sample/internal/adapters/httpserver"
-	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/otel/trace"
+	"go.uber.org/zap"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -11,10 +11,10 @@ import (
 
 type App struct {
 	tracer trace.Tracer
-	logger *logrus.Logger
+	logger *zap.Logger
 }
 
-func NewApp(tracer trace.Tracer, logger *logrus.Logger) *App {
+func NewApp(tracer trace.Tracer, logger *zap.Logger) *App {
 	return &App{
 		tracer: tracer,
 		logger: logger,

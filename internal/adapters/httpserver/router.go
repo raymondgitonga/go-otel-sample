@@ -3,8 +3,8 @@ package httpserver
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/otel/trace"
+	"go.uber.org/zap"
 	"net/http"
 )
 
@@ -12,10 +12,10 @@ const name = "otel-sample"
 
 type Handler struct {
 	tracer trace.Tracer
-	logger *logrus.Logger
+	logger *zap.Logger
 }
 
-func NewHandler(tracer trace.Tracer, logger *logrus.Logger) *Handler {
+func NewHandler(tracer trace.Tracer, logger *zap.Logger) *Handler {
 	return &Handler{
 		tracer: tracer,
 		logger: logger,

@@ -6,7 +6,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/raymondgitonga/go-otel-sample/cmd/web"
 	"github.com/raymondgitonga/go-otel-sample/internal/middleware/instrumentation"
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 	"log"
 	"net/http"
 	"os"
@@ -23,8 +23,10 @@ func main() {
 	shutdown, tracer := instrumentation.SetupTracer(ctx)
 	defer shutdown()
 
-	logger := logrus.New()
-	logger.SetFormatter(&logrus.JSONFormatter{})
+	logger, err := zap.NewProduction()
+	if err != nil {
+		log.Fatalf("error initialising logger: %s", err)
+	}
 
 	app := web.NewApp(tracer, logger)
 
