@@ -11,6 +11,7 @@ services:
       - "8889:8889"   # Prometheus exporter metrics
       - "13133:13133" # health_check extension
       - "4317:4317"   # OTLP gRPC receiver
+      - "54525:54525"
 #      - "4318:4318"   # OTLP http receiver
 
 #  webapp:

@@ -3,7 +3,6 @@ package web
 import (
 	"github.com/raymondgitonga/go-otel-sample/internal/adapters/httpserver"
 	"go.opentelemetry.io/otel/trace"
-	"go.uber.org/zap"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -11,19 +10,17 @@ import (
 
 type App struct {
 	tracer trace.Tracer
-	logger *zap.Logger
 }
 
-func NewApp(tracer trace.Tracer, logger *zap.Logger) *App {
+func NewApp(tracer trace.Tracer) *App {
 	return &App{
 		tracer: tracer,
-		logger: logger,
 	}
 }
 
 func (c *App) StartApp() (*mux.Router, error) {
 	r := mux.NewRouter()
-	handler := httpserver.NewHandler(c.tracer, c.logger)
+	handler := httpserver.NewHandler(c.tracer)
 
 	r.HandleFunc("/health-check", handler.HealthCheck).Methods(http.MethodGet)
 

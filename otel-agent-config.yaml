@@ -1,0 +1,60 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+  tcplog:
+    listen_address: "0.0.0.0:54525"
+
+  hostmetrics:
+    collection_interval: 10s
+    scrapers:
+      paging:
+        metrics:
+          system.paging.utilization:
+            enabled: true
+      cpu:
+        metrics:
+          system.cpu.utilization:
+            enabled: true
+      disk:
+      filesystem:
+        metrics:
+          system.filesystem.utilization:
+            enabled: true
+      load:
+      memory:
+      network:
+      processes:
+
+
+processors:
+  batch:
+    send_batch_max_size: 100
+    send_batch_size: 10
+    timeout: 10s
+
+exporters:
+  datadog:
+    api:
+      key: ""
+      site: ""
+
+extensions:
+  health_check:
+
+service:
+  extensions: [ health_check ]
+  pipelines:
+    metrics:
+      receivers: [ hostmetrics, otlp ]
+      processors: [ batch ]
+      exporters: [ datadog ]
+    traces:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ datadog ]
+    logs:
+      receivers: [ tcplog ]
+      processors: [ batch ]
+      exporters: [ datadog ]
